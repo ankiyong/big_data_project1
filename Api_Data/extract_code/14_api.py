@@ -13,8 +13,8 @@ def final(info):
     location = info['GU_NM']
     addr = info['ADDR']
     return {
-        'location':location,
-        'address':addr
+        '지역구':location,
+        '주소':addr
         }
 def get_info(data):
     loc_info = []
@@ -27,11 +27,10 @@ def get_info(data):
 def save_to_file(loc_info):
   file = open("../file/loc_info.csv", mode="w")
   writer = csv.writer(file)
-  writer.writerow(['location','address'])
+  writer.writerow(['지역구','주소'])
   for info in loc_info:
     writer.writerow(list(info.values()))
   return
 
 loc_info = get_info(data)
 save_to_file(loc_info)
-print(loc_info)

@@ -18,14 +18,15 @@ def get_loc_name():
 
 def get_info(loc_name):
     official_price = []
+    year = [2017,2018,2019]
     key = '4174677349706f70373455597a785a'
     for loc in loc_name:
-        url = f'http://openapi.seoul.go.kr:8088/{key}/json/IndividuallyPostedLandPriceService/1/5/{loc}/ / / / /2020'
-        res = requests.get(url)
-        data= res.json()['IndividuallyPostedLandPriceService']['row']
-        official_price.append(data)
+        for y in year:
+            url = f'http://openapi.seoul.go.kr:8088/{key}/json/IndividuallyPostedLandPriceService/1/5/{loc}/ / / / /{y}'
+            res = requests.get(url)
+            data= res.json()['IndividuallyPostedLandPriceService']['row']
+            official_price.append(data)
     return official_price
-
 
 
 def final(price_info):
@@ -33,9 +34,10 @@ def final(price_info):
     price = price_info['JIGA']
     year = price_info['YEAR']
     return {
+        'year': year,
         'location':loc_name,
-        'price':price,
-        'year':year
+        'price':price
+
     }
 
 def get_final_info(official_price):
@@ -49,7 +51,7 @@ def get_final_info(official_price):
 def save_to_file(final_info):
   file = open("../file/official_price.csv", mode="w")
   writer = csv.writer(file)
-  writer.writerow(['location','price','year'])
+  writer.writerow(['기간','지역구','지가'])
   for info in final_info:
     writer.writerow(list(info.values()))
   return
@@ -60,15 +62,7 @@ final_price = get_info(loc)
 final_info = get_final_info(final_price)
 save_to_file(final_info)
 
-#
-# price = get_info(loc)
-# # print(final(price))
-# print(price)
 
-
-# loc = get_loc_name()
-# info = get_info(loc)
-# print(info)
 
 
 
