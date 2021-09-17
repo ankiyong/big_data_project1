@@ -1,0 +1,39 @@
+################ 유동인구
+
+a = spark.read.format("csv").option("header", true").load("data/서울시_유동인구_현황.csv")
+
+a = a.select('ID', '기간코드', '지역코드', floor('총생활인구수'), floor('일최대인구수'), floor('일최소인구수'), floor('주간인구수'), floor('야간인구수'), floor('일최대이동인구수'), floor('자치구간이동인구수'))
+
+a.coalesce(1).write.format("csv").option("header","true").mode("overwrite").save("data/qwe.csv")
+
+a = spark.read.format("csv").load("data/qwe.csv")
+
+a= a.filter(col('_c0')!='ID')
+
+a.coalesce(1).write.format("csv").mode("overwrite").save("data/fin/서울시_유동인구_현황.csv")
+
+################ 유흥업소
+
+a = spark.read.format("csv").load("data/서울시_유흥업소_현황.csv")
+
+a = a.filter(col('_c0')!='ID')
+
+a.coalesce(1).write.format("csv").mode("overwrite").save("data/fin/서울시_유흥업소.csv")
+
+################ 인구밀도
+
+milDo = spark.read.format("csv").option("header", true").load("lastOfFinal/서울시_인구밀도_현황.csv")
+
+milDo2 = milDo.replace([","],[""],"인구")
+
+milDo3 = milDo2.replace([","],[""],"인구밀도")
+
+milDo4 = milDo3.select('ID', '기간', '지역코드', '인구', floor('면적'), '인구밀도')
+
+milDo4.coalesce(1).write.format("csv").option("header","true").mode("overwrite").save("lastOfFinal/서울시_인구밀도_현황.csv")
+
+milDo = spark.read.format("csv").load("lastOfFinal/서울시_인구밀도_현황.csv")
+
+milDo2 = playGround.filter(col('_c0')!='ID')
+
+a.coalesce(1).write.format("csv").mode("overwrite").save("data/fin/서울시_유흥업소_현황.csv")
